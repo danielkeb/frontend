@@ -23,7 +23,7 @@ const GenrePieChart: React.FC = () => {
     // Fetch pie chart data from your API
     const fetchPieData = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/songs/genre');
+        const response = await axios.get('https://backend-a5rk.onrender.com:10000/api/songs/genre');
         setData(response.data);
       } catch (error) {
         console.error('Error fetching pie chart data:', error);
