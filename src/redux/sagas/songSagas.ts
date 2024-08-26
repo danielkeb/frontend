@@ -35,7 +35,7 @@ type SagaResult<T> = Generator<CallEffect<T> | PutEffect<any> | Effect, void, an
 // Saga function to fetch songs
 function* fetchSongs(): SagaResult<any> {
   try {
-    const response = yield call(axios.get, 'https://backend-a5rk.onrender.com:10000/api/songs/');
+    const response = yield call(axios.get, 'https://backend-a5rk.onrender.com/api/songs/');
     yield put(fetchSongsSuccess(response.data));
   } catch (error) {
     yield put(fetchSongsFailure(error instanceof AxiosError ? error.message : 'An unknown error occurred'));
@@ -45,7 +45,7 @@ function* fetchSongs(): SagaResult<any> {
 // Saga function to create a song
 function* createSong(action: PayloadAction<Song>): SagaResult<any> {
   try {
-    const response = yield call(axios.post, 'https://backend-a5rk.onrender.com:10000/api/songs/', action.payload);
+    const response = yield call(axios.post, 'https://backend-a5rk.onrender.com/api/songs/', action.payload);
     yield put(createSongSuccess(response.data));
 
   } catch (error) {
@@ -56,7 +56,7 @@ function* createSong(action: PayloadAction<Song>): SagaResult<any> {
 // Saga function to update a song
 function* updateSong(action: PayloadAction<Song>): SagaResult<any> {
   try {
-    const response = yield call(axios.put, `https://backend-a5rk.onrender.com:10000/api/songs/${action.payload._id}`, action.payload);
+    const response = yield call(axios.put, `https://backend-a5rk.onrender.com/api/songs/${action.payload._id}`, action.payload);
     yield put(updateSongSuccess(response.data));
 
   } catch (error) {
@@ -67,7 +67,7 @@ function* updateSong(action: PayloadAction<Song>): SagaResult<any> {
 // Saga function to delete a song
 function* deleteSong(action: PayloadAction<string>): SagaResult<any> {
   try {
-    yield call(axios.delete, `https://backend-a5rk.onrender.com:10000/api/songs/${action.payload}`);
+    yield call(axios.delete, `https://backend-a5rk.onrender.com/api/songs/${action.payload}`);
     yield put(deleteSongSuccess(action.payload));
 
   } catch (error) {
