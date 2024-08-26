@@ -34,8 +34,9 @@ const NavLink = styled(Link)`
 const Nav: React.FC = () => {
   return (
     <Navbar>
-      <NavLink to="/">Home</NavLink>
+      <NavLink to="/">Logo</NavLink>
       <div style={{ paddingRight: '4rem' }}>
+      <NavLink to="/">Home</NavLink>
         <NavLink to="/create">Register Song</NavLink>
         <NavLink to="/visualize">Visualize</NavLink>
         <NavLink to="/other">About</NavLink>
