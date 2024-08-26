@@ -22,6 +22,11 @@ const ChartWrapper = styled.div`
   max-width: 1200px;
   width: 100%;
   margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const SectionTitle = styled.h2`
@@ -35,10 +40,10 @@ const Display: React.FC = () => {
     <Container>
       <SectionTitle>Sample Data Visualization</SectionTitle>
       <ChartWrapper>
-        <div style={{ flex: '1 1 45%' }}>
+        <div style={{ flex: '1 1 45%', maxWidth: '100%' }}>
           <Visualize />
         </div>
-        <div style={{ flex: '1 1 45%' }}>
+        <div style={{ flex: '1 1 45%', maxWidth: '100%' }}>
           <GenrePieChart />
         </div>
       </ChartWrapper>
