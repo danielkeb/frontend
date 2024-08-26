@@ -29,7 +29,7 @@ const Visualize = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const response = await axios.get('https://backend-a5rk.onrender.com:10000/api/songs/stats');
+        const response = await axios.get('https://backend-a5rk.onrender.com/api/songs/stats');
         setVisualizationData({
           songCount: response.data.totalSongs,
           artistCount: response.data.totalArtists,
