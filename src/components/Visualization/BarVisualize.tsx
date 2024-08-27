@@ -11,9 +11,38 @@ import {
   Legend,
 } from 'chart.js';
 import axios from 'axios';
+import styled from '@emotion/styled';
 
 // Register the necessary components
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
+const Container = styled.div`
+  max-width: 800px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  text-align: center;
+`;
+
+const Heading = styled.h2`
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  color: #333;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+`;
+
+const LoadingMessage = styled.div`
+  font-size: 1.2rem;
+  color: #666;
+`;
+
+const ErrorMessage = styled.div`
+  font-size: 1.2rem;
+  color: red;
+`;
 
 const Visualize = () => {
   const [visualizationData, setVisualizationData] = useState({
@@ -47,11 +76,11 @@ const Visualize = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading visualization data...</div>;
+    return <LoadingMessage>Loading visualization data...</LoadingMessage>;
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <ErrorMessage>{error}</ErrorMessage>;
   }
 
   const { songCount, artistCount, genreCount, albumCount } = visualizationData;
@@ -85,14 +114,25 @@ const Visualize = () => {
         beginAtZero: true,
       },
     },
+    plugins: {
+      legend: {
+        display: true,
+        position: 'top' as const,  // Explicitly specify the position type
+        labels: {
+          font: {
+            size: 10,
+          },
+          color: '#333',
+        },
+      },
+    },
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: 'auto', padding: '2rem' }}>
-      <h2 style={{ textAlign: 'center', marginBottom: '1rem' }}>Music Library Overview</h2>
+    <Container>
+      <Heading>Music Library Overview</Heading>
       <Bar data={data} options={options} />
-    </div>
-   
+    </Container>
   );
 };
 

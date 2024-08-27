@@ -16,38 +16,51 @@ import GenreDropdown from './DropDown'; // Adjust the path if needed
 // Styled components
 const Container = styled.div`
   padding: 2rem;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 1200px;
-  margin: auto;
-  margin-top: 5rem; /* Ensure margin top is applied */
+  background-color: #f5f5f5;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  max-width: 90%;
+  margin: 2rem auto;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
 `;
 
 const SongListHeader = styled.h2`
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
   color: #333;
   text-align: center;
+  font-size: 2rem;
+  letter-spacing: 0.5px;
 `;
 
 const Form = styled.form`
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
+  justify-content: center;
 `;
 
 const Input = styled.input`
   flex: 1 1 200px;
   padding: 0.75rem;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 8px;
   font-size: 1rem;
+  transition: box-shadow 0.3s ease;
+
+  &:focus {
+    box-shadow: 0 0 5px rgba(81, 203, 238, 1);
+    outline: none;
+  }
 `;
 
 const FilterInput = styled(Input)`
-  flex: 1 1 200px;
-  margin-bottom: 1rem;
+  flex: 1 1 300px;
+  margin-bottom: 1.5rem;
 `;
 
 const Button = styled.button`
@@ -55,18 +68,25 @@ const Button = styled.button`
   color: #fff;
   border: none;
   padding: 0.75rem 1.5rem;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 1rem;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 
   &:hover {
     background-color: #4fa3c1;
+    transform: translateY(-2px);
   }
 `;
 
 const ErrorMessage = styled.p`
   color: red;
+  font-size: 0.9rem;
+  text-align: center;
+`;
+
+const SuccessMessage = styled.p`
+  color: green;
   font-size: 0.9rem;
   text-align: center;
 `;
@@ -80,8 +100,13 @@ const HeaderRow = styled.div`
   border-bottom: 1px solid #ddd;
   text-align: center;
   margin-bottom: 1rem;
+
   @media (max-width: 768px) {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas:
+      "title artist"
+      "album genre"
+      "actions actions";
   }
 `;
 
@@ -93,8 +118,13 @@ const SongItem = styled.div<{ isEven: boolean }>`
   background-color: ${(props) => (props.isEven ? '#f9f9f9' : '#fff')};
   border-bottom: 1px solid #ddd;
   text-align: center;
+
   @media (max-width: 768px) {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-areas:
+      "title artist"
+      "album genre"
+      "actions actions";
   }
 `;
 
@@ -105,6 +135,7 @@ const IconButton = styled.button`
   color: #333;
   font-size: 1.2rem;
   margin: 0 0.5rem;
+  transition: color 0.3s ease;
 
   &:hover {
     color: #61dafb;
@@ -125,6 +156,7 @@ const SongList: React.FC = () => {
   const [newSong, setNewSong] = useState<Song>({ title: '', artist: '', album: '', genre: '' });
   const [selectedSongId, setSelectedSongId] = useState<string | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [filterGenre, setFilterGenre] = useState<string>('');
   const { songs, loading, error } = useSelector((state: RootState) => state.songs);
 
@@ -136,6 +168,7 @@ const SongList: React.FC = () => {
   const handleDelete = (id: string) => {
     if (window.confirm('Are you sure you want to delete this song?')) {
       dispatch(deleteSongRequest(id));
+      setSuccessMessage('Song deleted successfully.');
     }
   };
 
@@ -153,14 +186,17 @@ const SongList: React.FC = () => {
 
     if (!title || !artist || !album || !genre) {
       setFormError('All fields are required.');
+      setSuccessMessage(null); // Clear success message if there's an error
       return;
     }
 
     if (selectedSongId) {
       dispatch(updateSongRequest({ ...newSong, _id: selectedSongId }));
+      setSuccessMessage('Song updated successfully.');
       setSelectedSongId(null); // Clear the selected song ID after update
     } else {
       dispatch(createSongRequest({ title, artist, album, genre, _id: '' }));
+      setSuccessMessage('Song created successfully.');
     }
 
     setNewSong({ title: '', artist: '', album: '', genre: '' });
@@ -172,11 +208,12 @@ const SongList: React.FC = () => {
   );
 
   return (
-    <Container>
+    <Container >
       <SongListHeader>Music Management</SongListHeader>
       {loading && <p>Loading...</p>}
-      {error && <p>Error: {error}</p>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
       {formError && <ErrorMessage>{formError}</ErrorMessage>}
+      {successMessage && <SuccessMessage>{successMessage}</SuccessMessage>}
       <Form onSubmit={handleCreate}>
         <Input
           type="text"
