@@ -173,7 +173,7 @@ const SongList: React.FC = () => {
 
   return (
     <Container>
-      <SongListHeader>Song List</SongListHeader>
+      <SongListHeader>Music Management</SongListHeader>
       {loading && <p>Loading...</p>}
       {error && <p>Error: {error}</p>}
       {formError && <ErrorMessage>{formError}</ErrorMessage>}
